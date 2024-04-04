@@ -2,7 +2,7 @@ name: Tests
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -18,6 +18,9 @@ jobs:
 
       - name: "Compile vslc"
         run: cd vslc && cmake -B build && cmake --build build
+
+      - name: "Check PS2,PS3,PS4"
+        run: cd vslc/vsl_programs && make ps2-check && make ps3-check && make ps4-check
 
       - name: "Open SSH if failure"
         uses: lhotari/action-upterm@v1
