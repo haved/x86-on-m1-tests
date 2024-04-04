@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-latest-xlarge
     steps:
       - uses: actions/checkout@v4
 
@@ -16,6 +16,9 @@ jobs:
       - name: "Compile assembly"
         run: cd assembly/examples && cmake -B build && cmake --build build
 
+      - name: "Run assembly"
+        run: assembly/examples/build/hello
+
       - name: "Compile vslc"
         run: cd vslc && cmake -B build && cmake --build build
 
@@ -23,8 +26,5 @@ jobs:
         run: cd vslc/vsl_programs && make ps2-check && make ps3-check && make ps4-check
 
       - name: "Open SSH if failure"
-        uses: lhotari/action-upterm@v1
+        uses: fawazahmed0/action-debug@main
         if: ${{ failure() }}
-        with:
-          wait-timeout-minutes: 1
-          limit-access-to-actor: true
