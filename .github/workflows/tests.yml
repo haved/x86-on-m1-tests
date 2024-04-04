@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Print system info"
+        run: uname -a
+
+      - name: "Compile assembly"
+        run: cd assembly/examples && cmake -B build && cmake --build build
+
+      - name: "Compile vslc"
+        run: cd vslc && cmake -B build && cmake --build build
+
+      - name: "Open SSH if failure"
+        uses: lhotari/action-upterm@v1
+        if: ${{ failure() }}
+        with:
+          wait-timeout-minutes: 1
+          limit-access-to-actor: true
